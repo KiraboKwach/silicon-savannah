@@ -1,0 +1,14 @@
+[
+  {
+    "id": "YOUR_CODEX_TASK_ID",
+    "name": "My project",
+    "taskTitle": "Build something useful",
+    "publicLinks": [
+      {
+        "label": "Web app",
+        "url": "https://example.com",
+        "description": "Replace with your own site"
+      }
+    ]
+  }
+]

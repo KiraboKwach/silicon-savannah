@@ -1,0 +1,16 @@
+name: Idea
+description: Suggest something useful or fun for the workspace.
+title: "Idea: "
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like to do?
+      description: Describe the experience, and why it would help.
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example or sketch
+      description: Optional. Use sample data in screenshots.

@@ -1,0 +1,317 @@
+.savannah-agent {
+  display: block;
+  overflow: visible;
+  isolation: isolate;
+  contain: style;
+  filter: drop-shadow(0 1px 0 #d8d7b52b);
+}
+.savannah-agent__chest {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.savannah-agent__eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.savannah-agent[data-motion="idle"] .savannah-agent__chest {
+  animation: builder-breathe 5.8s ease-in-out infinite;
+  animation-delay: var(--agent-phase);
+}
+.savannah-agent[data-motion="idle"] .savannah-agent__eyes {
+  animation: builder-blink 8.1s linear infinite;
+  animation-delay: var(--agent-phase);
+}
+.savannah-agent[data-motion="walking"] [data-part="far-leg"] {
+  transform-origin: 99px 195px;
+  animation: builder-stride 0.85s ease-in-out infinite;
+}
+.savannah-agent[data-motion="walking"] [data-part="near-leg"] {
+  transform-origin: 106px 195px;
+  animation: builder-stride 0.85s ease-in-out infinite reverse;
+}
+.savannah-agent[data-motion="walking"] [data-part="far-arm"] {
+  transform-origin: 70px 126px;
+  animation: builder-arm 0.85s ease-in-out infinite;
+}
+.savannah-agent[data-pose="reading"] .savannah-agent__device-arm {
+  transform: rotate(-9deg);
+  transform-origin: 143px 135px;
+}
+.savannah-agent[data-pose="editing"] .savannah-agent__device-arm,
+.savannah-agent[data-pose="command"] .savannah-agent__device-arm {
+  transform: rotate(-15deg);
+  transform-origin: 143px 135px;
+}
+.savannah-agent[data-pose="testing"] .savannah-agent__device-arm {
+  transform: rotate(-5deg);
+  transform-origin: 143px 135px;
+}
+.savannah-agent[data-offline="true"] {
+  opacity: 0.72;
+}
+@keyframes builder-breathe {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.004);
+  }
+}
+@keyframes builder-blink {
+  0%,
+  45%,
+  48%,
+  100% {
+    transform: scaleY(1);
+  }
+  46.5% {
+    transform: scaleY(0.08);
+  }
+}
+@keyframes builder-stride {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+@keyframes builder-arm {
+  0%,
+  100% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(-5deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .savannah-agent * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+.builder-character-lineup .lineup-main-view,
+.builder-character-lineup .lineup-silhouette {
+  width: 100px;
+  height: 180px;
+  margin: auto;
+}
+.builder-character-lineup .lineup-state-item svg {
+  width: 70px;
+  height: 126px;
+}
+.builder-character-lineup .lineup-small-view {
+  width: 46px;
+  height: 83px;
+  margin: auto;
+}
+.savannah-agent[data-visible="false"] * {
+  animation-play-state: paused !important;
+}
+.lineup-silhouette .savannah-agent {
+  filter: brightness(0);
+}
+.lineup-state-item .savannah-agent {
+  grid-column: 1/-1;
+}
+/* Same world placement, but registration is explicitly the sole contact line. */
+.landscape-dashboard .map-agent {
+  --character-height: clamp(154px, 12.15cqw, 243px);
+  height: var(--character-height);
+  margin-top: calc(var(--character-height) * 0.283333);
+  transform: translate(-50%, -95.5556%);
+}
+@media (max-width: 700px) {
+  .builder-character-lineup .lineup-grid {
+    grid-template-columns: repeat(2, minmax(130px, 1fr));
+  }
+  .builder-character-lineup {
+    padding: 12px;
+  }
+  .builder-character-lineup label {
+    display: block;
+    margin: 8px 0;
+  }
+}
+/* Social and work gestures live inside the rig; navigation never shares their transform. */
+.savannah-agent__attention {
+  transform-origin: 103px 85px;
+  transition: transform 0.35s ease;
+}
+.savannah-agent[data-behaviour="notice"] .savannah-agent__attention,
+.savannah-agent[data-behaviour="look"] .savannah-agent__attention {
+  transform: rotate(-7deg) skewY(-2deg);
+}
+.savannah-agent[data-behaviour="inspect"] .savannah-agent__attention {
+  transform: rotate(8deg);
+}
+.savannah-agent[data-behaviour="inspect"] .savannah-agent__device-arm,
+.savannah-agent[data-behaviour="equipment"] .savannah-agent__device-arm {
+  transform: rotate(-21deg);
+  transform-origin: 143px 135px;
+}
+.savannah-agent[data-motion="idle"][data-behaviour="speaking"] .savannah-agent__attention {
+  animation: builder-nod 2.4s ease-in-out 2;
+}
+.savannah-agent[data-motion="idle"][data-behaviour="listening"] .savannah-agent__attention {
+  animation: builder-nod 5s ease-in-out infinite;
+  animation-delay: var(--agent-phase);
+}
+.savannah-agent[data-motion="idle"][data-behaviour="acknowledge"] .savannah-agent__attention {
+  animation: builder-nod 0.6s ease-in-out 1;
+}
+.savannah-agent[data-motion="idle"][data-behaviour="inspect"] [data-part="far-arm"] {
+  transform-origin: 70px 128px;
+  animation: builder-point 4.6s ease-in-out 1;
+}
+.savannah-agent[data-motion="idle"][data-behaviour="equipment"] [data-part="far-arm"] {
+  transform-origin: 70px 128px;
+  animation: builder-stretch 4.5s ease-in-out 1;
+}
+.savannah-agent[data-motion="idle"][data-pose="editing"] [data-part="far-arm"],
+.savannah-agent[data-motion="idle"][data-pose="command"] [data-part="far-arm"] {
+  transform-origin: 70px 128px;
+  animation: builder-type 2.8s ease-in-out infinite;
+}
+.savannah-agent[data-motion="idle"][data-pose="testing"] .savannah-agent__attention,
+.savannah-agent[data-motion="idle"][data-pose="reading"] .savannah-agent__attention {
+  animation: builder-read 4.8s ease-in-out infinite;
+}
+.savannah-agent[data-distance-gait="true"][data-motion="walking"] [data-part="far-leg"] {
+  animation: none;
+  transform: rotate(var(--gait-swing, 0deg));
+}
+.savannah-agent[data-distance-gait="true"][data-motion="walking"] [data-part="near-leg"] {
+  animation: none;
+  transform: rotate(calc(var(--gait-swing, 0deg) * -1));
+}
+.savannah-agent[data-distance-gait="true"][data-motion="walking"] .near-calf {
+  transform: rotate(var(--gait-knee-near, 0deg));
+}
+.savannah-agent[data-distance-gait="true"][data-motion="walking"] .far-calf {
+  transform: rotate(var(--gait-knee-far, 0deg));
+}
+.savannah-agent[data-distance-gait="true"][data-motion="walking"] [data-part="far-arm"] {
+  animation: none;
+  transform: rotate(calc(var(--gait-swing, 0deg) * -1));
+}
+.savannah-agent[data-distance-gait="true"][data-motion="walking"] .savannah-agent__device-arm {
+  transform-origin: 143px 135px;
+  transform: rotate(var(--gait-swing, 0deg));
+}
+.savannah-agent[data-distance-gait="true"][data-motion="walking"] .savannah-agent__chest {
+  transform: rotate(var(--gait-torso, 0deg));
+  animation: none;
+}
+@keyframes builder-nod {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  40% {
+    transform: rotate(5deg);
+  }
+  70% {
+    transform: rotate(-2deg);
+  }
+}
+@keyframes builder-point {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25%,
+  65% {
+    transform: rotate(-33deg);
+  }
+}
+@keyframes builder-stretch {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  45% {
+    transform: rotate(12deg);
+  }
+}
+@keyframes builder-type {
+  0%,
+  100% {
+    transform: rotate(-29deg);
+  }
+  40%,
+  60% {
+    transform: rotate(-35deg);
+  }
+}
+@keyframes builder-read {
+  0%,
+  100% {
+    transform: rotate(4deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+.project-building-target {
+  pointer-events: all;
+  cursor: pointer;
+  outline: none;
+}
+.project-building-target:focus-visible .project-architecture {
+  filter: drop-shadow(0 0 3px #f5d396);
+}
+.project-building-target[aria-pressed="true"] .project-architecture {
+  filter: drop-shadow(0 0 3px #ecc987);
+}
+.project-dropdown[data-selected="true"] .project-hover-trigger {
+  border-color: #edce91;
+  box-shadow: 0 0 0 2px #edce9133;
+}
+.inspection-status {
+  position: absolute;
+  top: 12%;
+  left: 28%;
+  max-width: 45%;
+  z-index: 15;
+  background: #18382fed;
+  border: 1px solid #ceb47b;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  pointer-events: none;
+}
+.inspection-status small {
+  display: block;
+  font-size: 10px;
+  opacity: 0.75;
+  margin-top: 3px;
+}
+.component-inspection {
+  stroke: #f6d693;
+  stroke-width: 2;
+  fill: #efd49122;
+}
+.component-working {
+  animation: component-work 2.4s ease-in-out infinite;
+}
+@keyframes component-work {
+  50% {
+    opacity: 0.55;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .savannah-agent *,
+  .component-working {
+    animation: none !important;
+    transition: none !important;
+  }
+  .savannah-agent[data-motion="walking"] [data-part],
+  .savannah-agent .near-calf,
+  .savannah-agent .far-calf {
+    transform: none !important;
+  }
+}

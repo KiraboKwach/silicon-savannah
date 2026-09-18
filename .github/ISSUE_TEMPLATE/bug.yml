@@ -1,0 +1,18 @@
+name: Bug report
+description: Help reproduce a problem.
+title: "Bug: "
+body:
+  - type: textarea
+    id: steps
+    attributes:
+      label: What happened?
+      description: Include steps, expected behaviour and actual behaviour. Use sample data.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: OS, browser, Node version, demo or local mode
+    validations:
+      required: true
