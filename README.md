@@ -15,7 +15,7 @@ Built with Codex and Astra. Still an experiment, and open to ideas.
 Install **Node.js 24 or newer**, then:
 
 ```sh
-git clone https://github.com/sewasong_microsoft/silicon-savannah.git
+git clone https://github.com/YOUR-USERNAME/silicon-savannah.git
 cd silicon-savannah
 npm ci
 npm run build
