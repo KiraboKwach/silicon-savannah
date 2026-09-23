@@ -77,9 +77,24 @@ export default function ProjectArchitecture({
           <stop offset="1" stopColor="#788f7b" />
         </linearGradient>
         <linearGradient id={id + "wall"}>
-          <stop stopColor="#a2ac94" />
-          <stop offset="1" stopColor="#657d6d" />
+          <stop stopColor="#d0c4a6" />
+          <stop offset=".55" stopColor="#a6ae99" />
+          <stop offset="1" stopColor="#6e897d" />
         </linearGradient>
+        <linearGradient id={id + "glass"} x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#acd6cc" />
+          <stop offset=".3" stopColor="#4d817e" />
+          <stop offset=".55" stopColor="#244b52" />
+          <stop offset="1" stopColor="#122f38" />
+        </linearGradient>
+        <linearGradient id={id + "plaza"} x2="0" y2="1">
+          <stop stopColor="#849783" />
+          <stop offset="1" stopColor="#425d52" />
+        </linearGradient>
+        <radialGradient id={id + "ground"}>
+          <stop stopColor="#051813" stopOpacity=".6" />
+          <stop offset="1" stopColor="#051813" stopOpacity="0" />
+        </radialGradient>
       </defs>
       {selected && (
         <ellipse cy="12" rx="108" ry="49" fill="none" stroke="#f0cd8c" strokeWidth="2" />
@@ -98,14 +113,44 @@ export default function ProjectArchitecture({
           />
         </g>
       )}
-      <ellipse cx="5" cy="21" rx="93" ry="32" fill="#0a251e" opacity=".3" />
+      <ellipse cx="12" cy="26" rx="108" ry="42" fill={`url(#${id}ground)`} />
       <path d="M-91 4Q-65-20 0-36Q61-22 91 4L91 13Q50 41 0 51Q-50 40-91 13Z" fill="#334d3d" />
       <path
         d="M-91 4Q-65-20 0-36Q61-22 91 4Q50 32 0 43Q-50 32-91 4Z"
-        fill="#6b7d58"
+        fill={`url(#${id}plaza)`}
         stroke="#a2ad84"
         strokeWidth=".6"
       />
+      <g aria-hidden="true" className="campus-landscaping">
+        <path
+          d="M-84 14Q-45 37 0 46Q45 36 84 14"
+          fill="none"
+          stroke="#d5c09a"
+          strokeWidth=".9"
+          opacity=".65"
+        />
+        <path
+          d="M-69 8-16 31 0 24 54 0"
+          fill="none"
+          stroke="#c2b496"
+          strokeWidth="8"
+          opacity=".65"
+        />
+        <path
+          d="M-69 8-16 31 0 24 54 0"
+          fill="none"
+          stroke="#ede0c1"
+          strokeWidth=".5"
+          strokeDasharray="1 4"
+        />
+        {[-58, -32, 32, 58].map((x) => (
+          <g key={x} transform={`translate(${x} ${33 - Math.abs(x) * 0.27})`}>
+            <ellipse cy="3" rx="3" ry="1.4" fill="#172f29" opacity=".6" />
+            <path d="M0 2v-5" stroke="#263f38" strokeWidth="1.4" />
+            <path d="M-1.6-3h3.2" stroke="#f0d6a2" strokeWidth="1.3" />
+          </g>
+        ))}
+      </g>
       <path
         d="M-76 6Q-28 32 0 32T78 6"
         fill="none"
@@ -142,14 +187,38 @@ export default function ProjectArchitecture({
                 d={`M${-w} ${-h} 0 ${-h + w * 0.42}V${w * 0.42}L${-w} 0Z`}
                 fill={"url(#" + id + "wall)"}
               />
-              <path d={`M0 ${-h + w * 0.42} ${w} ${-h}V0L0 ${w * 0.42}Z`} fill="#3a5c50" />
+              <path d={`M0 ${-h + w * 0.42} ${w} ${-h}V0L0 ${w * 0.42}Z`} fill="#284a46" />
+              <path
+                d={`M${-w + 4} ${-h + 6} -4 ${-h + w * 0.42 + 4}V${w * 0.42 - 5}L${-w + 4} -5Z`}
+                fill={`url(#${id}glass)`}
+              />
+              <path
+                d={`M4 ${-h + w * 0.42 + 4} ${w - 4} ${-h + 6}V-5L4 ${w * 0.42 - 5}Z`}
+                fill={`url(#${id}glass)`}
+                opacity=".75"
+              />
+              {[0.25, 0.5, 0.75].map((t) => (
+                <g key={t} aria-hidden="true">
+                  <path
+                    d={`M${-w + w * t} ${-h + w * t * 0.42 + 4}v${h - 8}M${w * t} ${-h + w * (1 - t) * 0.42 + 4}v${h - 8}`}
+                    stroke="#c6c5a9"
+                    strokeWidth="1.3"
+                    opacity=".8"
+                  />
+                </g>
+              ))}
+              <path
+                d={`M${-w + 6} ${-h + 9} -8 ${-h + w * 0.42 + 7}v6L${-w + 6} ${-h + 15}Z`}
+                fill="#e5f3de"
+                opacity=".18"
+              />
               {[0.25, 0.55, 0.82].map((n) => (
                 <g key={n}>
                   <path
                     d={`M${-w + 5} ${-h * n} 0 ${-h * n + w * 0.42 - 2}`}
                     className="building-window"
-                    stroke="#23483f"
-                    strokeWidth={v === 3 ? 6 : 4}
+                    stroke="#b9b99f"
+                    strokeWidth="1.8"
                   />
                   <path
                     d={`M4 ${-h * n + w * 0.42 - 2} ${w - 4} ${-h * n + 2}`}
@@ -181,6 +250,31 @@ export default function ProjectArchitecture({
                 />
               )}
               <path d={`M${-w + 3} ${-h + 2}V-2`} stroke="#ede1b9" opacity=".45" />
+              <path
+                d={`M${-w - 1} -2 0 ${w * 0.42 - 2} ${w + 1} -2`}
+                fill="none"
+                stroke="#c8b391"
+                strokeWidth="3"
+              />
+              <g className="campus-entry" aria-hidden="true">
+                <path
+                  d={`M-12 ${w * 0.42 - 8} 0 ${w * 0.42 - 3} 12 ${w * 0.42 - 8}v10L0 ${w * 0.42 + 7}-12 ${w * 0.42 + 2}Z`}
+                  fill="#142f32"
+                />
+                <path
+                  d={`M-17 ${w * 0.42 - 10} 0 ${w * 0.42 - 17} 17 ${w * 0.42 - 10} 0 ${w * 0.42 - 3}Z`}
+                  fill="#d3b989"
+                  stroke="#ead8ad"
+                  strokeWidth=".65"
+                />
+                <path d={`M-14 ${w * 0.42 - 9}v12m28-12v12`} stroke="#ac9977" strokeWidth="1" />
+                <path
+                  d={`M-12 ${w * 0.42 + 4} 0 ${w * 0.42 + 9} 12 ${w * 0.42 + 4}`}
+                  fill="none"
+                  stroke="#bbc4ab"
+                  strokeWidth="2"
+                />
+              </g>
             </g>
             {selected && selectedComponent === i && (
               <path
