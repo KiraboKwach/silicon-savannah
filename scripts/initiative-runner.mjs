@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { displayData } from "./privacy.mjs";
 import { capabilityFor } from "./initiative-capabilities.mjs";
 import path from "node:path";
 import os from "node:os";
@@ -171,7 +172,7 @@ export class InitiativeRunner {
     if (url.pathname !== "/api/initiative") return false;
     const send = (status, value) => {
       res.writeHead(status, { "Content-Type": "application/json", "Cache-Control": "no-store" });
-      res.end(JSON.stringify(value));
+      res.end(JSON.stringify(displayData(value)));
     };
     if (req.method !== "POST") {
       send(405, { error: "POST required" });

@@ -1,7 +1,5 @@
-const clean = (value, max = 200) =>
-  typeof value === "string"
-    ? value.replace(/(?:sk-|art_v2_)[A-Za-z0-9_-]+/g, "[redacted]").slice(0, max)
-    : "";
+import { redactText } from "./privacy.mjs";
+const clean = (text, max = 200) => redactText(text, max);
 export function workSignal(turn, items, status) {
   const result = {
     kind:

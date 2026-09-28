@@ -1,3 +1,4 @@
+import { redactText } from "./privacy.mjs";
 import { workSignal } from "./work-signal.mjs";
 import { DatabaseSync } from "node:sqlite";
 import fs from "node:fs";
@@ -19,13 +20,7 @@ export function sessionActivity(sessions, now = Date.now()) {
     averageIdleMs: gaps.length ? Math.round(gaps.reduce((a, b) => a + b, 0) / gaps.length) : null,
   };
 }
-const safeText = (text, max = 350) =>
-  typeof text === "string"
-    ? text
-        .replace(/(?:sk-|art_v2_)[A-Za-z0-9_-]+/g, "[redacted]")
-        .replace(/https?:\/\/\S+/g, "[link]")
-        .slice(0, max)
-    : "";
+const safeText = (text, max = 350) => redactText(text, max);
 function label(item) {
   if (item.type === "commandExecution") return "Running a command";
   if (item.type === "fileChange") return "Editing project files";

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { api, type MemoryProject } from "@/lib/memory";
-import type { LiveProject } from "@/lib/live";
+
 export default function DiscoveryControls({
   catalog,
   memory,
@@ -10,7 +10,7 @@ export default function DiscoveryControls({
   onRefresh,
   offline,
 }: {
-  catalog: (LiveProject & { hidden?: boolean })[];
+  catalog: { id: string; name: string; hidden?: boolean; revision?: number }[];
   memory: MemoryProject[];
   page: number;
   pages: number;
@@ -21,7 +21,7 @@ export default function DiscoveryControls({
   const [busy, setBusy] = useState(""),
     [error, setError] = useState("");
   async function toggle(id: string, hidden: boolean) {
-    const p = memory.find((p) => p.id === id);
+    const p = catalog.find((p) => p.id === id) || memory.find((p) => p.id === id);
     if (!p) return;
     setBusy(id);
     setError("");
@@ -30,7 +30,7 @@ export default function DiscoveryControls({
         projectId: id,
         operation: "set_visibility",
         input: { hidden },
-        revision: p.revision,
+        revision: p.revision ?? memory.find((entry) => entry.id === id)?.revision,
         key: crypto.randomUUID(),
       });
       onRefresh();
@@ -72,7 +72,7 @@ export default function DiscoveryControls({
         <div className="discovery-projects">
           {catalog.map((p) => (
             <div key={p.id}>
-              <span title={p.taskTitle}>{p.name}</span>
+              <span>{p.name}</span>
               <button disabled={!!busy || offline} onClick={() => toggle(p.id, !p.hidden)}>
                 {busy === p.id ? "Saving…" : p.hidden ? "Show" : "Hide"}
               </button>

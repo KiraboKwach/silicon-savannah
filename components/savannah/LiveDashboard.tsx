@@ -88,12 +88,6 @@ export default function LiveDashboard({
         });
         if (!response.ok) throw Error("offline");
         const snapshot = (await response.json()) as LiveSnapshot;
-        // Keep the configured display rename visible with older running local servers.
-        const brokerId = "01a0802a-160f-75a2-9d3b-bd7454ae713b";
-        for (const entries of [snapshot.projects, snapshot.catalog, snapshot.memory])
-          entries?.forEach((project) => {
-            if (project.id === brokerId) project.name = "Broker app";
-          });
         if (!snapshot.connected || !Array.isArray(snapshot.projects)) throw Error("invalid");
         if (!stopped) {
           setData(snapshot);

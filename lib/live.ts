@@ -41,7 +41,7 @@ export type LiveSnapshot = {
   memory?: MemoryProject[];
   exchange?: SharedIdea[];
   projects: LiveProject[];
-  catalog?: (LiveProject & { hidden?: boolean })[];
+  catalog?: { id: string; name: string; hidden?: boolean; revision?: number }[];
 };
 export function liveWorld(snapshot: LiveSnapshot): World {
   const w = initialWorld();

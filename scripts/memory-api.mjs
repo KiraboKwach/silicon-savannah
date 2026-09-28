@@ -1,15 +1,25 @@
+import { displayData } from "./privacy.mjs";
 import { reconcileObservations } from "./memory-seed.mjs";
 export function memoryApi(store, demo, observe) {
   return async (req, res, url) => {
     if (!url.pathname.startsWith("/api/memory")) return false;
+    let runtime = null;
     const send = (status, value) => {
       res.writeHead(status, { "Content-Type": "application/json", "Cache-Control": "no-store" });
-      res.end(JSON.stringify(value));
+      const hidden = new Set(
+        store
+          .list()
+          .filter((p) => p.hidden)
+          .map((p) => p.id),
+      );
+      const output =
+        runtime || url.pathname === "/api/memory/token" ? value : displayData(value, hidden);
+      res.end(JSON.stringify(output ?? { error: "Project hidden from dashboard" }));
     };
     try {
       const bearer = req.headers.authorization?.replace(/^Bearer /, "");
-      const runtime = bearer ? store.authenticate(bearer) : null;
-      if (bearer && !runtime) {
+      runtime = bearer ? store.authenticate(bearer) : null;
+      if (req.headers.authorization !== undefined && !runtime) {
         send(403, { error: "Invalid runtime credential" });
         return true;
       }
@@ -26,8 +36,10 @@ export function memoryApi(store, demo, observe) {
         } else {
           let observations = null;
           try {
-            observations = observe();
-            reconcileObservations(store, observations);
+            if (url.searchParams.get("mode") !== "demo") {
+              observations = observe();
+              reconcileObservations(store, observations);
+            }
           } catch {
             /* Existing memory remains readable if Codex is unavailable. */
           }

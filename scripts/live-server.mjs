@@ -1,4 +1,5 @@
 import http from "node:http";
+import { displayData, projectCatalog, forwardedRequest } from "./privacy.mjs";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -62,7 +63,7 @@ setInterval(() => {
 http
   .createServer(async (req, res) => {
     const allowed = new Set([`127.0.0.1:${port}`, `localhost:${port}`]);
-    if (!allowed.has(req.headers.host)) {
+    if (!allowed.has(req.headers.host) || forwardedRequest(req.headers)) {
       res.writeHead(403).end();
       return;
     }
@@ -142,22 +143,19 @@ http
         );
         res.end(
           JSON.stringify({
-            ...observed,
-            projects: observed.projects.filter((p) => !hidden.has(p.id)),
-            catalog: observed.projects.map((p) => ({ ...p, hidden: hidden.has(p.id) })),
-            memory: store.list("live"),
-            exchange: store.ideas("live"),
+            ...displayData(observed, hidden),
+            catalog: projectCatalog(observed.projects, store.list("live")),
+            memory: displayData(store.list("live"), hidden),
+            exchange: displayData(store.ideas("live"), hidden),
           }),
         );
       } catch {
-        res
-          .writeHead(503)
-          .end(
-            JSON.stringify({
-              connected: false,
-              error: "Local Codex history unavailable. Open Codex on this computer.",
-            }),
-          );
+        res.writeHead(503).end(
+          JSON.stringify({
+            connected: false,
+            error: "Local Codex history unavailable. Open Codex on this computer.",
+          }),
+        );
       }
       return;
     }

@@ -47,6 +47,43 @@ test("HTTP runtime context, roles, revisions and result flow use one persistent 
     );
     assert.equal(credential.status, 200);
     const token = credential.value.token;
+    store.seed({ id: "hidden", name: "Private", mode: "live", agents: [], tasks: [] });
+    store.command(
+      "hidden",
+      { id: "local-user", role: "coordinator" },
+      "set_visibility",
+      { hidden: true },
+      { revision: store.get("hidden").revision, key: randomUUID() },
+    );
+    const browser = await (await fetch(url + "/api/memory")).json();
+    assert.equal(
+      browser.projects.some((p) => p.id === "hidden"),
+      false,
+    );
+    assert.equal(store.get("hidden").hidden, true);
+    assert.match(token, /^[a-f0-9]{64}$/);
+    assert.equal(
+      (await fetch(url + "/api/memory", { headers: { Authorization: "Bearer " } })).status,
+      403,
+    );
+    const demoOnly = await (await fetch(url + "/api/memory?mode=demo")).json();
+    assert.equal(demoOnly.observations, null);
+    assert.equal(demoOnly.projects.length, 0);
+    const restore = await post(
+      "/api/memory/command",
+      {
+        projectId: "hidden",
+        operation: "set_visibility",
+        input: { hidden: false },
+        revision: store.get("hidden").revision,
+        key: randomUUID(),
+      },
+      null,
+      true,
+    );
+    assert.equal(restore.status, 200);
+    assert.equal(store.get("hidden").hidden, false);
+
     const update = async (op, input, key = randomUUID(), revision = store.get("p").revision) =>
       post("/api/memory/command", { projectId: "p", operation: op, input, key, revision }, token);
     assert.equal((await update("claim", { taskId: "t" })).status, 200);

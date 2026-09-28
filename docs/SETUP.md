@@ -55,3 +55,11 @@ The development-only character lineup is at http://127.0.0.1:5174/?characters.
 Keep the backend on loopback. It is designed for one local user, not public hosting or multi-user authentication. A public static build may show the sample scene, but local execution and memory require the local service.
 
 `SAVANNAH_DATA_DIR` selects a different coordination data directory. Back up SQLite using its backup tooling while running, or stop the server before copying the database and associated files.
+
+## Privacy and publishing
+
+The live server is a single-user localhost service, not an authenticated public service. Do not expose it through a tunnel, reverse proxy, port forwarding, or shared host. Host/Origin checks and rejection of forwarding headers are precautions, not authentication. Publish only the static `dist` frontend for a public demo; never attach the live API or local data directory.
+
+Display responses mask common credentials, emails and local paths. This is best-effort redaction, not a guarantee that confidential prose is anonymous. Configured public links omit query strings and fragments; use a clean public destination URL. Runtime-scoped context retains the original data needed for work.
+
+Hidden projects retain their saved data. The management catalog includes only identity, visibility and revision so they can be restored; hiding is not an access-control boundary. Before sharing screenshots or recordings, use presentation fixtures and review the exported media for private names, text and browser chrome. Previously published media and Git history are not rewritten by these protections.

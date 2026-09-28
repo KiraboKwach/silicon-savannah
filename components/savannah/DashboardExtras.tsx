@@ -28,7 +28,7 @@ export default function DashboardExtras({
       </TabsList>
       <TabsContent value="activity">
         <div className="compact-activity">
-          {[...(data.catalog || data.projects)]
+          {[...data.projects]
             .sort((a, b) => b.lastAt - a.lastAt)
             .slice(0, 8)
             .map((p) => (
